@@ -14,7 +14,7 @@ public class GameLogic : MonoBehaviour
 
     void Update()
     {
-
+        Debug.Log(listOfPlayers.Count);
     }
 
     public void SetNewPlayer(int id)

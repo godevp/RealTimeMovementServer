@@ -58,7 +58,15 @@ static public class NetworkedServerProcessing
         {
             if(player.id == clientConnectionID)
             {
+                foreach(Player p in gameLogic.listOfPlayers)
+                {
+                    if(p.id != clientConnectionID)
+                    {
+                        SendMessageToClient(ServerToClientSignifiers.DestroyCertainPlayer.ToString() + '|' + player.id, p.id);
+                    }
+                }
                 gameLogic.listOfPlayers.Remove(player);
+                
                 break;
             }
         }
