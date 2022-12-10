@@ -21,6 +21,12 @@ static public class NetworkedServerProcessing
             case ClientToServerSignifiers.HereIsMyPosition:
                 gameLogic.SetPlayerPosition(float.Parse(csv[1]), float.Parse(csv[2]), clientConnectionID);
                 break;
+            case ClientToServerSignifiers.PressedButton:
+                Debug.Log("Client Pressed Button");
+                break;
+            case ClientToServerSignifiers.ButtonReleased:
+                Debug.Log("Client Released Button");
+                break;
         }
     }
     static public void SendMessageToClient(string msg, int clientConnectionID)
@@ -41,6 +47,7 @@ static public class NetworkedServerProcessing
     static public void ConnectionEvent(int clientConnectionID)
     {
         Debug.Log("New Connection, ID == " + clientConnectionID);
+
         gameLogic.SetNewPlayer(clientConnectionID);
     }
     static public void DisconnectionEvent(int clientConnectionID)
@@ -83,12 +90,17 @@ static public class NetworkedServerProcessing
 static public class ClientToServerSignifiers
 {
     public const int HereIsMyPosition = 1;
+    public const int PressedButton = 2;
+    public const int ButtonReleased = 3;
 }
 
 static public class ServerToClientSignifiers
 {
     public const int RequestForPositionAndGivingSpeed = 1;
     public const int NewClientJoined = 2;
+    public const int SendBackID = 3;
+    public const int PressButton = 4;
+    public const int ReleaseButton = 5;
 }
 
 #endregion

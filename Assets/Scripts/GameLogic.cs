@@ -20,6 +20,7 @@ public class GameLogic : MonoBehaviour
 
     public void SetNewPlayer(int id)
     {
+        NetworkedServerProcessing.SendMessageToClient(ServerToClientSignifiers.SendBackID.ToString() + '|' + id , id);
         Player newPlayer = new Player();
         newPlayer.id = id;
         listOfPlayers.AddLast(newPlayer);
