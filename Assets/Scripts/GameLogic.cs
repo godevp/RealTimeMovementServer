@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class GameLogic : MonoBehaviour
 {
-    const float CharacterSpeed = 0.03f;
+    const float CharacterSpeed = 0.13f;
     float fixedDeltaTime;
     public LinkedList<Player> listOfPlayers = new LinkedList<Player>();
     void Start()
