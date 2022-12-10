@@ -22,10 +22,10 @@ static public class NetworkedServerProcessing
                 gameLogic.SetPlayerPosition(float.Parse(csv[1]), float.Parse(csv[2]), clientConnectionID);
                 break;
             case ClientToServerSignifiers.PressedButton:
-                Debug.Log("Client Pressed Button");
+                gameLogic.PlayerWithThisIDPressedThisButton(clientConnectionID, csv[1]);
                 break;
             case ClientToServerSignifiers.ButtonReleased:
-                Debug.Log("Client Released Button");
+                gameLogic.PlayerWithThisIDReleasedThisButton(clientConnectionID, csv[1]);
                 break;
         }
     }
