@@ -25,7 +25,7 @@ static public class NetworkedServerProcessing
                 gameLogic.PlayerWithThisIDPressedThisButton(clientConnectionID, csv[1]);
                 break;
             case ClientToServerSignifiers.ButtonReleased:
-                gameLogic.PlayerWithThisIDReleasedThisButton(clientConnectionID, csv[1], float.Parse(csv[2]), float.Parse(csv[3]),true);
+                gameLogic.PlayerWithThisIDReleasedThisButton(clientConnectionID, csv[1]);
                 break;
         }
     }
@@ -106,14 +106,12 @@ static public class ClientToServerSignifiers
 
 static public class ServerToClientSignifiers
 {
-    public const int RequestForPositionAndGivingSpeed = 1;
+    public const int RequestForPosition = 1;
     public const int NewClientJoined = 2;
     public const int SendBackID = 3;
-    public const int PressButton = 4;
-    public const int ReleaseButton = 5;
-    public const int SendAllClients = 6;
-    public const int HereNewDataForPlayerByTheID = 7;
-    public const int DestroyCertainPlayer = 8;
+    public const int SendAllClients = 4;
+    public const int DestroyCertainPlayer = 5;
+    public const int HereNewDataForPlayerByTheID = 6;
 }
 
 #endregion
