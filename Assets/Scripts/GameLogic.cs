@@ -4,13 +4,12 @@ using UnityEngine;
 
 public class GameLogic : MonoBehaviour
 {
-    public const float CharacterSpeed = 0.13f;
-    public float fixedDeltaTime;
+    public const float CharacterSpeed = 280.0f;
+    public float fixedDeltaTime = 0.04f;
     public LinkedList<Player> listOfPlayers = new LinkedList<Player>();
     void Start()
     {
         NetworkedServerProcessing.SetGameLogic(this);
-        fixedDeltaTime = Time.fixedDeltaTime;
     }
 
     void Update()
@@ -40,7 +39,7 @@ public class GameLogic : MonoBehaviour
                         NetworkedServerProcessing.SendMessageToClient(ServerToClientSignifiers.NewClientJoined.ToString() + '|'
                                                                       + player.id + '|' + player._pos.x + '|' + player._pos.y, p.id);
                     }
-                    else if(p.id != id && forUpdate)
+                    else if(forUpdate)
                     {
                         NetworkedServerProcessing.SendMessageToClient(ServerToClientSignifiers.HereNewDataForPlayerByTheID.ToString() + '|'
                                                                       + player.id + '|' + player._pos.x + '|' + player._pos.y, p.id);
@@ -59,12 +58,12 @@ public class GameLogic : MonoBehaviour
         }
 
     }
-    public void PlayerWithThisIDReleasedThisButton(int id, string button)
+    public void PlayerWithThisIDReleasedThisButton(int id, string button,float x, float y, bool forUpdate)
     {
         foreach (Player player in listOfPlayers)
         {
             NetworkedServerProcessing.SendMessageToClient(ServerToClientSignifiers.ReleaseButton.ToString() + '|' + id + '|' + button, player.id);
-            //SetPlayerPosition(x, y, id);
+            SetPlayerPosition(x, y, id,true);
         }
     }
 
