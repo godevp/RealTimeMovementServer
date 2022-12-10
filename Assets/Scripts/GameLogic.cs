@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class GameLogic : MonoBehaviour
 {
-    const float CharacterSpeed = 0.13f;
-    float fixedDeltaTime;
+    public const float CharacterSpeed = 0.13f;
+    public float fixedDeltaTime;
     public LinkedList<Player> listOfPlayers = new LinkedList<Player>();
     void Start()
     {
@@ -26,7 +26,7 @@ public class GameLogic : MonoBehaviour
         listOfPlayers.AddLast(newPlayer);
         NetworkedServerProcessing.SendMessageToClient(ServerToClientSignifiers.RequestForPositionAndGivingSpeed.ToString() + '|' + fixedDeltaTime + '|' + CharacterSpeed, id);
     }
-    public void SetPlayerPosition(float posX, float posY, int id)
+    public void SetPlayerPosition(float posX, float posY, int id, bool forUpdate)
     {
         foreach (Player player in listOfPlayers)
         {
@@ -35,9 +35,14 @@ public class GameLogic : MonoBehaviour
                 player._pos = new Vector2(posX, posY);
                 foreach (Player p in listOfPlayers)
                 {
-                    if (p.id != id)
+                    if (p.id != id && !forUpdate)
                     {
                         NetworkedServerProcessing.SendMessageToClient(ServerToClientSignifiers.NewClientJoined.ToString() + '|'
+                                                                      + player.id + '|' + player._pos.x + '|' + player._pos.y, p.id);
+                    }
+                    else if(p.id != id && forUpdate)
+                    {
+                        NetworkedServerProcessing.SendMessageToClient(ServerToClientSignifiers.HereNewDataForPlayerByTheID.ToString() + '|'
                                                                       + player.id + '|' + player._pos.x + '|' + player._pos.y, p.id);
                     }
                 }
@@ -50,6 +55,7 @@ public class GameLogic : MonoBehaviour
         foreach (Player player in listOfPlayers)
         {
             NetworkedServerProcessing.SendMessageToClient(ServerToClientSignifiers.PressButton.ToString() + '|' + id + '|' + button, player.id);
+           
         }
 
     }
@@ -58,7 +64,24 @@ public class GameLogic : MonoBehaviour
         foreach (Player player in listOfPlayers)
         {
             NetworkedServerProcessing.SendMessageToClient(ServerToClientSignifiers.ReleaseButton.ToString() + '|' + id + '|' + button, player.id);
+            //SetPlayerPosition(x, y, id);
         }
+    }
+
+    public void SendAllCurrentClients(int playerID)
+    {
+        foreach(Player player in listOfPlayers)
+        {
+            if(player.id != 0 && player.id != playerID)
+            {
+                NetworkedServerProcessing.SendMessageToClient(ServerToClientSignifiers.SendAllClients.ToString() + '|'
+                                                                       + player.id + '|' + player._pos.x + '|' + player._pos.y, playerID);
+            }
+        }    
+    }
+    public float GetCopyOfSpeed()
+    {
+        return CharacterSpeed;
     }
 }
 public class Player

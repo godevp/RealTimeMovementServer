@@ -19,13 +19,17 @@ static public class NetworkedServerProcessing
         switch (signifier)
         {
             case ClientToServerSignifiers.HereIsMyPosition:
-                gameLogic.SetPlayerPosition(float.Parse(csv[1]), float.Parse(csv[2]), clientConnectionID);
+                gameLogic.SetPlayerPosition(float.Parse(csv[1]), float.Parse(csv[2]), clientConnectionID, false);
+                break;
+            case ClientToServerSignifiers.HereIsMyPositionForJustUpdate:
+                gameLogic.SetPlayerPosition(float.Parse(csv[1]), float.Parse(csv[2]), clientConnectionID, true);
                 break;
             case ClientToServerSignifiers.PressedButton:
                 gameLogic.PlayerWithThisIDPressedThisButton(clientConnectionID, csv[1]);
                 break;
             case ClientToServerSignifiers.ButtonReleased:
                 gameLogic.PlayerWithThisIDReleasedThisButton(clientConnectionID, csv[1]);
+                SendMessageToClient(ServerToClientSignifiers.RequestForExistingClientsPosUpdate.ToString(), clientConnectionID);
                 break;
         }
     }
@@ -49,6 +53,7 @@ static public class NetworkedServerProcessing
         Debug.Log("New Connection, ID == " + clientConnectionID);
 
         gameLogic.SetNewPlayer(clientConnectionID);
+        gameLogic.SendAllCurrentClients(clientConnectionID);
     }
     static public void DisconnectionEvent(int clientConnectionID)
     {
@@ -92,7 +97,9 @@ static public class ClientToServerSignifiers
     public const int HereIsMyPosition = 1;
     public const int PressedButton = 2;
     public const int ButtonReleased = 3;
+    public const int HereIsMyPositionForJustUpdate = 4;
 }
+
 
 static public class ServerToClientSignifiers
 {
@@ -101,6 +108,9 @@ static public class ServerToClientSignifiers
     public const int SendBackID = 3;
     public const int PressButton = 4;
     public const int ReleaseButton = 5;
+    public const int SendAllClients = 6;
+    public const int RequestForExistingClientsPosUpdate = 7;
+    public const int HereNewDataForPlayerByTheID = 8;
 }
 
 #endregion
