@@ -53,8 +53,8 @@ public class GameLogic : MonoBehaviour
                 else if (p.pressedS)
                     p.charVelocity.y = -CharacterSpeed;
 
-               p._pos += p.charVelocity *= Time.fixedDeltaTime;
-               SetPlayerPosition(p._pos.x, p._pos.y, p.id, true);
+
+                SetPlayerPosition(p._pos.x, p._pos.y, p.id, true);
             }
         }
     }
@@ -79,12 +79,12 @@ public class GameLogic : MonoBehaviour
                     if (p.id != id && !forUpdate)
                     {
                         NetworkedServerProcessing.SendMessageToClient(ServerToClientSignifiers.NewClientJoined.ToString() + '|'
-                                                                      + player.id + '|' + player._pos.x + '|' + player._pos.y, p.id);
+                                                                      + player.id + '|' + player.charVelocity.x + '|' + player.charVelocity.y, p.id);
                     }
                     else if(forUpdate)
                     {
                         NetworkedServerProcessing.SendMessageToClient(ServerToClientSignifiers.HereNewDataForPlayerByTheID.ToString() + '|'
-                                                                      + player.id + '|' + player._pos.x + '|' + player._pos.y, p.id);
+                                                                      + player.id + '|' + player.charVelocity.x + '|' + player.charVelocity.y, p.id);
                     }
                 }
                 break;
@@ -174,7 +174,7 @@ public class GameLogic : MonoBehaviour
             if(player.id != 0 && player.id != playerID)
             {
                 NetworkedServerProcessing.SendMessageToClient(ServerToClientSignifiers.SendAllClients.ToString() + '|'
-                                                                       + player.id + '|' + player._pos.x + '|' + player._pos.y,
+                                                                       + player.id + '|' + player.charVelocity.x + '|' + player.charVelocity.y,
                                                                         playerID);
             }
         }    
