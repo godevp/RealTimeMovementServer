@@ -111,7 +111,7 @@ class MsgToSendWithLatency
 {
     public string msg;
     public int id;
-    const float LatencySimulationTotal = 0.09f;
+    const float LatencySimulationTotal = 0.2f;
     public float latency = LatencySimulationTotal;
 
     public MsgToSendWithLatency(string Msg, int ID)
